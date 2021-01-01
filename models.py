@@ -28,7 +28,7 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(100), nullable=False,
-                          default='/blank.png')
+                          default='/static/blank.png')
 
     # def greet(self):
     #     return f'Hi I am {self.name} the {self.species}'
