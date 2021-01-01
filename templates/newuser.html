@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block title %}Add User{% endblock%} {% block
+content%}
+<div class="col-12">
+	<h2 class="display-3">Add a User:</h2>
+</div>
+<div class="col-4">
+	<div class="form-group py-3">
+		<form action="/users/new" method="POST">
+			<label for="first_name" class="mt-2">First Name:</label>
+			<input
+				type="text"
+				name="first_name"
+				id=""
+				class="form-control"
+				placeholder="Enter First Name..."
+			/>
+			<label for="last_name" class="mt-2">Last Name:</label>
+			<input
+				type="text"
+				name="last_name"
+				id=""
+				class="form-control"
+				placeholder="Enter last Name..."
+			/>
+			<label for="image_url" class="mt-2">User Image Url:</label>
+			<input
+				type="text"
+				name="image_url"
+				id=""
+				class="form-control"
+				placeholder="Enter User Image Url..."
+			/>
+			<button name="submit-user" class="btn btn-primary px-5 mt-5">
+				Submit New User
+			</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

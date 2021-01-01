@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block title %}User Details{% endblock%} {% block
+content%}
+<div class="col-12">
+	<h2 class="display-3">User Details:</h2>
+</div>
+<div class="col-4">
+	<div class="card bg-dark text-white mt-3">
+		<img class="card-img-top" src="{{user.image_url}}" alt="" />
+		<div class="card-body">
+			<h4 class="card-title">{{user.first_name}} {{user.last_name}}</h4>
+		</div>
+	</div>
+</div>
+<div class="col-12">
+	<a
+		name="edit-user"
+		id=""
+		class="btn btn-primary px-5 mt-4"
+		href="/users/{{user.id}}/edit"
+		role="button"
+		>Edit User</a
+	>
+	<a
+		name="delete-user"
+		id=""
+		class="btn btn-danger px-3 mt-4"
+		href="/users/{{user.id}}/delete"
+		role="button"
+		>Delete User</a
+	>
+</div>
+{% endblock %}
