@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.hybrid import hybrid_property
 
 db = SQLAlchemy()
+DEFAULT_IMAGE = '/static/blank.png'
 
 
 def connect_db(app):
@@ -9,14 +11,7 @@ def connect_db(app):
 
 
 class User(db.Model):
-    """"""
-    # @classmethod
-    # def get_by_species(cls, species):
-    #     return cls.query.filter_by(species=species).all()
-
-    # @classmethod
-    # def get_all_hunger(cls):
-    #     return cls.query.filter(Pet.hunger > 20).all()
+    """Site User class"""
 
     def __repr__(self):
         u = self
@@ -28,12 +23,9 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(100), nullable=False,
-                          default='/static/blank.png')
+                          default=DEFAULT_IMAGE)
 
-    # def greet(self):
-    #     return f'Hi I am {self.name} the {self.species}'
-
-    # def feed(self, amt=20):
-    #     """Update hunger based off of amount"""
-    #     self.hunger -= amt
-    #     self.hunger = max(self.hunger, 0)
+    @hybrid_property
+    def full_name(self):
+        """Returns full name of user"""
+        return self.first_name + " " + self.last_name
