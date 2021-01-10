@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block title %}{{post.title}}{% endblock%} {% block
+content%}
+<div class="col-lg-8 col-sm-10 col-12 mb-5">
+	<h2 class="display-3 mb-3">{{post.title}}</h2>
+	<p class="display-4">{{post.content}}</p>
+</div>
+<div class="col-lg-6 col-sm-10 col-12 mt-5">
+	<a
+		name="cancel"
+		id=""
+		class="btn btn-outline-warning btn-sm px-5 mt-4"
+		href="/users/{{post.user_id}}"
+		role="button"
+		>Cancel</a
+	>
+	<a
+		name="edit-post"
+		id=""
+		class="btn btn-primary btn-sm px-5 mt-4"
+		href="/posts/{{post.id}}/edit"
+		role="button"
+		>Edit Post</a
+	>
+	<a
+		name="delete-post"
+		id=""
+		class="btn btn-danger btn-sm px-3 mt-4"
+		href="/posts/{{post.id}}/delete"
+		role="button"
+		>Delete Post</a
+	>
+</div>
+{% endblock %}

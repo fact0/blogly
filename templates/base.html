@@ -16,6 +16,11 @@
 			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 			crossorigin="anonymous"
 		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+			crossorigin="anonymous"
+		/>
 		<link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}" />
 	</head>
 	<body id="bootstrap-overrides">
@@ -46,6 +51,9 @@
 		<div class="container text-center">
 			<div class="row align-content-center justify-content-center">
 				{% block content%} {% endblock %}
+			</div>
+			<div class="row align-content-center justify-content-start">
+				{% block contenttwo %} {% endblock %}
 			</div>
 		</div>
 		<!-- Optional JavaScript -->

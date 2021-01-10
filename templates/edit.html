@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block title %}Edit Post{% endblock%} {% block
+content%}
+<div class="col-lg-8 col-sm-10 col-12">
+	<h2 class="display-4">Edit Post:</h2>
+</div>
+<div class="col-lg-6 col-sm-10 col-12">
+	<div class="form-group py-3">
+		<form action="/posts/{{post.id}}/edit" method="POST">
+			<label for="post_title" class="mt-2">Title:</label>
+			<input
+				type="text"
+				name="post_title"
+				id=""
+				class="form-control"
+				placeholder="Enter Post Title..."
+			/>
+			<label for="post_text" class="mt-2">Post Content:</label>
+			<textarea
+				type="text"
+				name="post_text"
+				id=""
+				class="form-control"
+				placeholder="Enter Post Content..."
+				rows="4"
+			/></textarea>
+			<button name="submit-user" class="btn btn-primary px-5 mt-4">
+				Submit Post
+			</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

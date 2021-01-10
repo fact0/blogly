@@ -1,9 +1,6 @@
 {% extends 'base.html' %} {% block title %}{{user.full_name}}{% endblock%} {%
 block content%}
-<div class="col-lg-8 col-sm-10 col-12">
-	<h2 class="display-3">User Details:</h2>
-</div>
-<div class="col-lg-6 col-sm-10 col-12">
+<div class="col-lg-6 col-sm-10 col-12 mt-5">
 	<div class="card bg-dark text-white mt-3">
 		{% if user.image_url %}
 		<img class="card-img-top" src="{{user.image_url}}" alt="" />
@@ -14,8 +11,6 @@ block content%}
 			<h4 class="card-title">{{user.full_name}}</h4>
 		</div>
 	</div>
-</div>
-<div class="col-sm-10 col-12">
 	<a
 		name="edit-user"
 		id=""
@@ -31,6 +26,26 @@ block content%}
 		href="/users/{{user.id}}/delete"
 		role="button"
 		>Delete User</a
+	>
+</div>
+<div class="col-lg-6 col-sm-10 col-12 mt-5">
+	<h2 class="display-4">Posts</h2>
+	<div class="list-group">
+		{% for post in user.posts %}
+		<a
+			href="/posts/{{post.id}}"
+			class="list-group-item list-group-item-action list-group-item-dark"
+			>{{post.title}}</a
+		>
+		{% endfor %}
+	</div>
+	<a
+		name="add-post"
+		id=""
+		class="btn btn-primary px-3 mt-5"
+		href="/users/{{user.id}}/posts/new"
+		role="button"
+		>Add Post</a
 	>
 </div>
 {% endblock %}
