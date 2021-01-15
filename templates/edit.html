@@ -23,6 +23,18 @@ content%}
 				placeholder="Enter Post Content..."
 				rows="4"
 			/></textarea>
+			{% for tag in tags %}			
+			<label class="btn btn-info mt-3" for="tag_{{ tag.id }}">
+			{{ tag.name }}	  
+				<input class="btn btn-info"
+					type="checkbox"
+					value="{{ tag.id }}"
+					id="tag_{{ tag.id }}"
+					name="tags"
+					{% if tag in post.tags %}checked{% endif %}>
+			</label>
+			{% endfor %}
+			<br>
 			<button name="submit-user" class="btn btn-primary px-5 mt-4">
 				Submit Post
 			</button>
@@ -30,3 +42,5 @@ content%}
 	</div>
 </div>
 {% endblock %}
+
+\

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag, PostTag
 
 # Use test database and don't clutter tests with SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
@@ -23,8 +23,10 @@ class BloglyUserTestCase(TestCase):
     def setUp(self):
         """Add sample users."""
 
+        PostTag.query.delete()
         Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
 
         u1 = User(
             first_name='Michael',
@@ -113,11 +115,13 @@ class BloglyUserTestCase(TestCase):
 
     def test_delete_user(self):
         with app.test_client() as client:
-            resp = client.get(f"/users/{self.user_id}/delete")
+            resp = client.get(
+                f"/users/{self.user_id}/delete", follow_redirects=True)
             html = resp.get_data(as_text=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
             self.assertNotEqual('Michael Schienbein', html)
+            self.assertIn('deleted', html)
 
 
 class BloglyPostTestCase(TestCase):
@@ -126,8 +130,10 @@ class BloglyPostTestCase(TestCase):
     def setUp(self):
         """Add sample posts users."""
 
+        PostTag.query.delete()
         Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
 
         u1 = User(
             first_name='Michael',
@@ -198,8 +204,120 @@ class BloglyPostTestCase(TestCase):
 
     def test_delete_post(self):
         with app.test_client() as client:
-            resp = client.get(f"/posts/{self.post_id}/delete")
+            resp = client.get(
+                f"/posts/{self.post_id}/delete", follow_redirects=True)
             html = resp.get_data(as_text=True)
 
-            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.status_code, 200)
             self.assertNotEqual('Text Post One', html)
+            self.assertIn('deleted', html)
+
+
+class BloglyTagTestCase(TestCase):
+    """Tests for tag related routes."""
+
+    def setUp(self):
+        """Add sample posts users tags posttags."""
+
+        PostTag.query.delete()
+        Post.query.delete()
+        User.query.delete()
+        Tag.query.delete()
+
+        u1 = User(
+            first_name='Michael',
+            last_name='Schienbein',
+            image_url='https://files.catbox.moe/g1vsie.png')
+        p1 = Post(
+            title='Test Post One',
+            content='This is a models unittest post',
+            user=u1)
+        t1 = Tag(name="Test1")
+
+        t2 = Tag(name="Test2")
+
+        db.session.add(u1)
+        db.session.commit()
+        db.session.add_all([p1, t1, t2])
+        db.session.commit()
+
+        pt = PostTag(post_id=p1.id, tag_id=t1.id)
+        db.session.add(pt)
+        db.session.commit()
+
+        self.user_id = u1.id
+        self.post_id = p1.id
+        self.tags_id = t1.id
+
+    def tearDown(self):
+        """Clean up any fouled transaction."""
+
+        db.session.rollback()
+
+    def test_render_tags_page(self):
+        with app.test_client() as client:
+            resp = client.get(f"/tags")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Tags List', html)
+            self.assertIn('Test1', html)
+            self.assertIn('Test2', html)
+
+    def test_render_tags_new_page(self):
+        with app.test_client() as client:
+            resp = client.get(f"/tags/new")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Add New Tag', html)
+            self.assertIn('Submit Tag', html)
+
+    def test_new_tag_post(self):
+        with app.test_client() as client:
+            d = {"tag_name": "Test1"}
+            resp = client.post(
+                f"/tags/new", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Test1", html)
+
+    def test_render_show_tag_page(self):
+        with app.test_client() as client:
+            resp = client.get(f"/tags/{self.tags_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Test1', html)
+            self.assertIn('Posts Containing', html)
+            self.assertIn('Test Post One', html)
+
+    def test_render_edit_tag_page(self):
+        with app.test_client() as client:
+            resp = client.get(f"/tags/{self.tags_id}/edit")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Test1', html)
+            self.assertIn('Edit', html)
+
+    def test_edit_tag(self):
+        with app.test_client() as client:
+            d = {"tag_name": "Edit1"}
+            resp = client.post(
+                f"/tags/{self.tags_id}/edit", data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Edit1", html)
+
+    def test_delete_tag(self):
+        with app.test_client() as client:
+            resp = client.get(
+                f"/tags/{self.tags_id}/delete", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotEqual('Test1', html)
+            self.assertIn('deleted', html)

@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block title %}Add Tag{% endblock%} {% block
+content%}
+<div class="col-12">
+	<h2 class="display-3">Add New Tag:</h2>
+</div>
+<div class="col-4">
+	<div class="form-group py-3">
+		<form action="/tags/new" method="POST">
+			<label for="tag_name" class="mt-2">Tag Name:</label>
+			<input
+				type="text"
+				name="tag_name"
+				id=""
+				class="form-control"
+				placeholder="Enter Tag Name..."
+			/>
+			<button name="submit-tag" class="btn btn-primary px-5 mt-5">
+				Submit Tag
+			</button>
+		</form>
+	</div>
+</div>
+{% endblock %}

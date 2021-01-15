@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block title %}{{tags.name}}{% endblock%} {% block
+content%}
+<div class="col-12">
+	<h2 class="display-3 mb-3">{{tags.name}}</h2>
+</div>
+<div class="col-4">
+	{% if posts %}
+	<p>Posts Containing "{{tags.name}}":</p>
+	<div class="list-group">
+		{% for post in posts %}
+		<a
+			href="/posts/{{post.id}}"
+			class="list-group-item list-group-item-action list-group-item-dark"
+			>{{post.title}}</a
+		>
+		{% endfor %}
+	</div>
+	{% endif %}
+	<a
+		name="edit-tag"
+		id=""
+		class="btn btn-primary px-5 mt-5"
+		href="/tags/{{tags.id}}/edit"
+		role="button"
+		>Edit Tag</a
+	>
+	<a
+		name="add-tag"
+		id=""
+		class="btn btn-danger px-5 mt-5"
+		href="/tags/{{tags.id}}/delete"
+		role="button"
+		>Delete Tag</a
+	>
+</div>
+{% endblock %}

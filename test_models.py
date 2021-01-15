@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag, PostTag
 
 # Use test database and don't clutter tests with SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
@@ -17,8 +17,10 @@ class UserModelTestCase(TestCase):
     def setUp(self):
         """Clean up any existing users."""
 
+        PostTag.query.delete()
         Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
 
     def tearDown(self):
         """Clean up any fouled transaction."""
@@ -81,8 +83,10 @@ class PostModelTestCase(TestCase):
     def setUp(self):
         """Clean up any existing users."""
 
+        PostTag.query.delete()
         Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
 
     def tearDown(self):
         """Clean up any fouled transaction."""
@@ -136,4 +140,75 @@ class PostModelTestCase(TestCase):
         db.session.commit()
 
         self.assertEqual(user.id, post.user_id)
-        
+
+
+class TagModelTestCase(TestCase):
+    """Tests for model for Tag class."""
+
+    def setUp(self):
+        """Clean up any existing users."""
+
+        PostTag.query.delete()
+        Post.query.delete()
+        User.query.delete()
+        Tag.query.delete()
+
+    def tearDown(self):
+        """Clean up any fouled transaction."""
+
+        db.session.rollback()
+
+    def test_create_tag(self):
+        tag = Tag(
+            name="Test")
+        db.session.add(tag)
+        db.session.commit()
+
+        self.assertEqual(tag.id, 3)
+        self.assertEqual(tag.name, "Test")
+
+
+class PostTagModelTestCase(TestCase):
+    """Tests for model for PostTag class."""
+
+    def setUp(self):
+        """Clean up any existing users."""
+
+        PostTag.query.delete()
+        Post.query.delete()
+        User.query.delete()
+        Tag.query.delete()
+
+    def tearDown(self):
+        """Clean up any fouled transaction."""
+
+        db.session.rollback()
+
+    def test_db_relationship(self):
+        tag1 = Tag(
+            name="Test")
+        tag2 = Tag(
+            name="Test2")
+        user = User(
+            first_name='Michael',
+            last_name='Schienbein',
+            image_url='https://files.catbox.moe/g1vsie.png')
+        post = Post(
+            title='Test Post One',
+            content='This is a models unittest post',
+            user=user)
+        db.session.add_all([user, post, tag1, tag2])
+        db.session.commit()
+
+        post_tag = PostTag(post_id=post.id, tag_id=tag2.id)
+        db.session.add(post_tag)
+        db.session.commit()
+
+        self.assertEqual(tag1.id, 1)
+        self.assertEqual(tag1.name, "Test")
+        self.assertEqual(tag2.id, 2)
+        self.assertEqual(tag2.name, "Test2")
+        self.assertEqual(post.id, 4)
+        self.assertEqual(post.title, "Test Post One")
+        self.assertEqual(post_tag.post_id, 4)
+        self.assertEqual(post_tag.tag_id, 2)

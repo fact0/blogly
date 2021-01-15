@@ -4,12 +4,17 @@
 </div>
 <div class="col-lg-8 col-sm-10 col-12 mb-5">
 	{% for post in posts %}
-	<h2 class="display-4 mb-3">{{post.title}}</h2>
-	<p class="display-5">{{post.content}}</p>
-	<p>
+	<h2 class="display-4 mb-3 font-weight-bold">{{post.title}}</h2>
+	<p class="display-5 font-weight-light">{{post.content}}</p>
+	<p class="font-weight-light">
 		<small>By {{ post.user.full_name }} on {{ post.friendly_date }}</small>
 	</p>
-	{% endfor %}
+	{% if post.tags %}
+	<p class="mt-2">
+		Tags: {% for tag in post.tags %}
+		<span class="badge bg-info">{{tag.name}}</span>
+		{% endfor %}
+	</p>
+	{% endif %} {% endfor %}
 </div>
 {% endblock %}
-

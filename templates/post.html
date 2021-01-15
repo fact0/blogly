@@ -1,10 +1,20 @@
 {% extends 'base.html' %} {% block title %}{{post.title}}{% endblock%} {% block
 content%}
-<div class="col-lg-8 col-sm-10 col-12 mb-5">
-	<h2 class="display-3 mb-3">{{post.title}}</h2>
-	<p class="display-4">{{post.content}}</p>
+<div class="col-lg-8 col-sm-10 col-12 mb-3">
+	<h2 class="display-3 mb-3 font-weight-bold">{{post.title}}</h2>
+	<p class="display-4 font-weight-normal">{{post.content}}</p>
+	<p class="mt-5 font-weight-light">
+		<small>By {{ post.user.full_name }} on {{ post.friendly_date }}</small>
+	</p>
+	{% if tags %}
+	<p class="mt-2">
+		Tags: {% for tag in tags %}
+		<span class="badge bg-info">{{tag.name}}</span>
+		{% endfor %}
+	</p>
+	{% endif %}
 </div>
-<div class="col-lg-6 col-sm-10 col-12 mt-5">
+<div class="col-lg-6 col-sm-10 col-12">
 	<a
 		name="cancel"
 		id=""
